@@ -1,0 +1,105 @@
+<!-- billingQuotas.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/style.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        form {
+            margin-bottom: 20px;
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            margin-bottom: 8px;
+            font-size: 17px;
+        }
+
+        input {
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        a{
+            padding: 10px;
+            text-decoration: none;
+            color: white;
+            border-radius: 5px;
+            background-color: #4285f4;
+        }
+        button {
+            background-color: #4285f4;
+            color: #fff;
+            border: none;
+            padding: 10px 15px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        button:hover {
+            background-color: #357ae8;
+        }
+
+        p {
+            margin: 8px 0;
+            font-size: 17px;
+            font-weight: 600;
+        }
+    </style>
+    <title>Billing Quotas</title>
+</head>
+<body>
+    <h2>Billing Quotas for Workspace <%= workspaceId %></h2>
+
+    <!-- Form or other elements for setting the quota -->
+    <form action="/billing-quotas/set" method="post">
+        <!-- Form elements -->
+        <label for="quotaLimit">Set Billing Quota Limit:</label>
+        <input type="number" id="quotaLimit" name="limit_in_dollars" required>
+
+        <!-- Добавьте скрытое поле для передачи workspaceId -->
+        <input type="hidden" name="workspace_id" value="<%= workspaceId %>">
+
+        <button type="submit">Set Quota</button>
+    </form>
+
+    <% if (billingQuotas && billingQuotas.length > 0) { %>
+        <!-- Display information about quotas, e.g., in a table or list -->
+        <% billingQuotas.forEach(quota => { %>
+            <p>Limit: <%= quota.limit_in_dollars %></p>
+            <!-- Other quota attributes -->
+        <% }); %>
+        <form action="" method="post">
+            <p>usage in this month: 0$</p>
+
+        </form>
+        <!-- Form or other elements for deleting the quota -->
+        <form action="/billing-quotas/delete/<%= workspaceId %>" method="post">
+            <button type="submit">Delete Quota</button>
+        </form>
+    <% } else { %>
+        <p>No billing quotas set for this workspace.</p>
+    <% } %>
+
+
+    <a href="/dashboard">Get Back</a>
+</body>
+</html>

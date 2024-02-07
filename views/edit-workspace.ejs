@@ -1,0 +1,98 @@
+<!-- edit-workspace.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/style.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 20px;
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            margin-bottom: 8px;
+        }
+
+        input {
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        button {
+            background-color: #4285f4;
+            color: #fff;
+            border: none;
+            padding: 10px 15px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        button:hover {
+            background-color: #357ae8;
+        }
+
+        a {
+            background-color: #4285f4;
+            color: #fff;
+            border: none;
+            padding: 10px 15px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 4px;
+            display: inline-block;
+            text-decoration: none;
+            margin-top: 10px;
+        }
+
+        a:hover {
+            background-color: #357ae8;
+        }
+
+        p {
+            color: red;
+        }
+    </style>
+    <title>Edit Workspace</title>
+</head>
+<body>
+    <h1>Edit Workspace</h1>
+    <% if (workspace) { %>
+    <form class="update-form" action="/workspaces/update-workspace/<%= workspace.workspace_id %>" method="post">
+        <label for="title">Title:</label>
+        <input type="text" id="title" name="title" value="<%= workspace.title %>" required>
+        
+        <label for="description">Description:</label>
+        <input type="text" id="description" name="description" value="<%= workspace.description %>">
+        
+        <input type="hidden" name="workspace_id" value="<%= workspace.workspace_id %>">
+        <button type="submit">Save Changes</button>
+    </form>
+    <!-- Добавьте кнопку "Cancel" для возвращения на dashboard без сохранения изменений -->
+    <a href="/dashboard">Cancel</a>
+    <% } else { %>
+        <p>Workspace not found</p>
+    <% } %>
+</body>
+</html>

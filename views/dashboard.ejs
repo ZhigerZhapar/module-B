@@ -1,0 +1,66 @@
+<!-- dashboard.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/public/style.css">
+    <title>Dashboard</title>
+</head>
+<body>
+    <a class="logout" href="/">Log Out</a>
+    <% if (typeof userData !== 'undefined') { %>
+        <!-- ... (контент для аутентифицированного пользователя) ... -->
+        <p>Welcome, <%= userData.username %>!</p>
+    <% } else { %>
+        
+        <!-- Форма для создания нового рабочего пространства -->
+        <form class="ntbbshka" action="/workspaces" method="post">
+            <label for="title">Title:</label>
+            <input type="text" id="title" name="title" required>
+            
+            <label for="description">Description:</label>
+            <input type="text" id="description" name="description">
+            
+            <button type="submit">Create Workspace</button>
+        </form>
+        
+        <!-- Контейнер для отображения списка рабочих пространств -->
+        <div id="workspacesContainer">
+            <% workspaces.forEach(workspace => { %>
+                <div class="workspace">
+                    <div class="workspace-info">
+                        <p><strong>Title:</strong> <%= workspace.title %></p>
+                        <p><strong>Description:</strong> <%= workspace.description %></p>
+                    </div>
+                    <div class="workspace-actions">
+                        <!-- Форма для удаления рабочего пространства -->
+                        <form class="delete-form" action="/workspaces/delete-item/<%= workspace.workspace_id %>" method="post">
+                            <input type="hidden">
+                            <button type="submit">Delete</button>
+                        </form>
+                        
+                        <form action="">
+                        <a href="/tokens/tokens-view/<%= workspace.workspace_id %>">API Tokens</a>
+                        </form>
+                        <form action="">
+                        <a href="/edit-workspace/<%= workspace.workspace_id %>">Update Workspace</a>
+                        </form>
+                        <form action="">
+                        <a href="/billing-quotas/view/<%= workspace.workspace_id %>">Billing Quotas</a>
+                        </form>
+
+                        <% if (workspace.title === 'My App') { %>
+                            <form action="">
+                                <a href="/bills/view/<%= workspace.workspace_id %>">Bills</a>
+                                </form>
+                            </div>
+                        <% } %>
+                    </div>
+                </div>
+            <% }); %>
+        </div>
+    <% } %>
+    <!-- Дополнительный контент для dashboard... -->
+</body>
+</html>

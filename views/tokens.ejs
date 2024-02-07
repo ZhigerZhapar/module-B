@@ -1,0 +1,125 @@
+<!-- tokens.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Tokens</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 20px;
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            margin-bottom: 8px;
+        }
+        a{
+            text-decoration: none;
+            background-color: #357ae8;
+            color: white;
+            padding: 10px;
+            font-weight: 500;
+            border-radius: 5px;
+        }
+        input {
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        button {
+            background-color: #4285f4;
+            color: #fff;
+            border: none;
+            padding: 10px 15px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        button:hover {
+            background-color: #357ae8;
+        }
+
+        #tokensContainer {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .token {
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            margin-bottom: 20px;
+        }
+
+        .token p {
+            margin: 8px 0;
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .token strong{
+            font-size: 16px;
+        }
+        form.revoke-form {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h2>Create API Token</h2>
+    <form action="/create-token/<%= workspace_id %>" method="post">
+        <label for="tokenName">Token Name:</label>
+        <input type="text" id="tokenName" name="name" required>
+        <button type="submit">Create Token</button>
+    </form>
+    
+    <h2>API Tokens</h2>
+    <div id="tokensContainer">
+        <% if (typeof createdTokenName !== 'undefined') { %>
+            <div class="token">
+                <p><strong>Token:</strong> <%= token %></p>
+                <a href="http://localhost:8800/tokens/tokens-view/<%= workspace_id %>">See Token</a>
+                <!-- Дополнительная информация о токене (не показывает token_value) -->
+            </div>
+        <% } else if (tokens && tokens.length > 0) { %>
+            <% tokens.forEach(token => { %>
+                <div class="token">
+                    <p><strong>Name:</strong> <%= token.name %></p>
+                    <p><strong>Token Creation Date:</strong> <%= token.creation_date %></p>
+                    <form class="revoke-form" action="/revoke-token/<%= token.token_id %>" method="post">
+                        <button type="submit">Revoke Token</button>
+                    </form>
+                </div>
+            <% }); %>
+        <% } else { %>
+            <p>No tokens available</p>
+        <% } %>
+    </div>
+
+
+    <a href="/dashboard">Get Back</a>
+</body>
+</html>

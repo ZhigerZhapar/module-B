@@ -1,0 +1,152 @@
+<!-- monthlyBill.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= month %> 2023 Bill</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 20px;
+            margin-bottom :20px;
+        }
+
+        th, td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 12px;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        td.colspan-total {
+            font-weight: bold;
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tbody tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        p {
+            margin-top: 20px;
+            font-size: 16px;
+            color: #555;
+        }
+        label{
+            display: block;
+            margin-bottom: 10px; font-size: 16px; color: #555;
+        }
+        input{
+            padding: 8px; font-size: 14px;
+        }
+        a{
+            padding: 10px;
+            text-decoration: none;
+            color: white;
+            border-radius: 5px;
+            background-color: #4CAF50;
+        }
+        button{
+                background-color: #4CAF50;
+                color: white;
+                padding: 10px 15px; 
+                border: none; 
+                border-radius: 5px; 
+                cursor: pointer; 
+                font-size: 16px;
+            }
+    </style>
+</head>
+<body>
+    <h2>Bills for Workspace My App - <%= month.charAt(0).toUpperCase() + month.slice(1) %> 2023</h2>
+    <% let totalCostOverall = 0; %>
+    <form action="/bills/open/<%= workspaceId %>/<%= month.toLowerCase() %>" method="get">
+        <label for="selectedDay">Select Day:</label>
+        <input type="number" id="selectedDay" name="day" min="1" max="31" required>
+        <button type="submit">Update</button>
+    </form>
+    <% if (selectedDate) { %>
+        <p>Selected Date: <%= month.charAt(0).toUpperCase() + month.slice(1) + ' ' + selectedDate %></p>
+
+
+    <% } %>
+    <% function formatTime(milliseconds) { %>
+        <% if (isNaN(milliseconds)) { %>
+            <% return 'N/A'; %>
+        <% } %>
+        <% const seconds = milliseconds / 500; %>
+        <% return `${seconds.toFixed(3)}`; %>
+    <% } %>
+
+    <% function formatCost(cost) { %>
+        <% return isNaN(cost) ? 'N/A' : `$${cost.toFixed(2)}`; %>
+    <% } %>
+                
+    <% if (bills && bills.length > 0) { %>
+
+        <!-- Bills are available -->
+        <table>
+            <thead>
+                <tr>
+                    <th>Token Name</th>
+                    <th>Service Name</th>
+                    <th>Total Usage (seconds)</th>
+                    <th>Cost per Second</th>
+                    <th>Total Cost</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% bills.forEach(bill => { %>
+                    <tr>
+                        <td><%= bill.tokenName || 'N/A' %></td>
+                        <td><%= bill.serviceName || 'N/A' %></td>
+                        <td><%= bill.totalTime || 'N/A' %>s</td>
+                        <td><%= bill.serviceCostPerMs !== undefined ? `${bill.serviceCostPerMs}` : 'N/A' %></td>
+                        <td><%= bill.totalCost || 'N/A' %></td>
+                        <% if (bill.totalCost !== 'N/A') { %>
+                            <% totalCostOverall += parseFloat(bill.totalCost.replace('$', '')); %>
+                        <% } %>
+                    </tr>
+                    
+                <% }); %>
+                <!-- ... (total row) -->
+            </tbody>
+        
+            <!-- Вставьте следующий код в конец таблицы -->
+            <tfoot>
+                <tr>
+                    <td colspan="4" class="colspan-total">Total:</td>
+                    <td><%= formatCost(totalCostOverall) %></td>
+                </tr>
+            </tfoot>
+        </table>
+        <a href="/bills/view/workspace.workspace_id">Get Back</a>
+
+    <% } else { %>
+        <!-- No bills available -->
+        <p>No bills available for this workspace and month.</p>
+        <a href="/bills/view/workspace.workspace_id">Get Back</a>
+    <% } %>
+    
+    <!-- Additional content at your discretion -->
+</body>
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bills</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        div {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin: 20px;
+            width: 100%;
+            padding: 20px;
+            text-align: center;
+        }
+
+        h3 {
+            color: #4285f4;
+        }
+
+        button {
+            background-color: #4285f4;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        a{
+            padding: 10px;
+            text-decoration: none;
+            color: rgb(125, 124, 124);
+            left: 0;
+            top: 0;
+            position: absolute;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #357ae8;
+        }
+    </style>
+</head>
+<body>
+    <a href="/dashboard">Get Back</a>
+    <h2>Bills for Workspace My App</h2>
+
+    <% const months = [ 'July', 'August']; %>
+    
+    <% months.forEach(month => { %>
+        <div>
+            <h3><%= month %> 2023</h3>
+            <form action="/bills/open/<%= workspaceId %>/<%= month.toLowerCase() %>" method="get">
+                <button type="submit">Open</button>
+            </form>
+        </div>
+    <% }); %>
+
+    <!-- Additional content at your discretion -->
+</body>
